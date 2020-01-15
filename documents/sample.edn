@@ -1,0 +1,30 @@
+{:basics       {:name     "Ash"
+                :label    "science officer"
+                :email    "ash@weyland-yutani.com"
+                :phone    "(912) 555-4321"
+                :website  "http://johndoe.com"
+                :summary  "Ash is a Hyperdyne Systems 120-A/2[2] synthetic that was created for Weyland-Yutani"
+                :location {:address     "2712 Broadway St"
+                           :postalCode  "M5A 1D3"
+                           :city        "Toronto"
+                           :countryCode "Canada"
+                           :region      "Ontario"}
+                :profiles [{:network  "GitHub"
+                            :username "ash"
+                            :url      "https://github.com/ash"}]}
+ :work         [{:company    "Weyland-Yutani Corporation"
+                 :position   "science officer"
+                 :website    "http://weyland-yutani.com"
+                 :startDate  "2122-01-01"
+                 :endDate    "2122-12-01"
+                 :summary    "a synthetic employee of the Weyland-Yutani Corporation and the science officer aboard the commercial towing vehicle USCSS Nostromo"}]
+ :education    [{:institution "University of Toronto"
+                 :area        "Xenobiology"
+                 :studyType   "Master"
+                 :startDate   "2118-09-01"
+                 :endDate     "2122-06-01"}]
+ :publications [{:name        "Xenomorph gestation lifecycle"
+                 :publisher   "Weyland-Yutani"
+                 :releaseDate "2123-01-15"
+                 :website     "https://weyland-yutani.com/publications/xenomorph"
+                 :summary     "gestation cycle of xenomorphs"}]}

@@ -1,0 +1,100 @@
+[:html
+ [:head
+  [:meta {:charset "utf-8"}]
+  [:meta {:name "viewport" :content "width=device-width, user-scalable=no, minimal-ui"}]
+  [:title "Dmitri Sotnikov"]
+  [:page/css
+   "css/bootstrap.min.css"
+   "css/octicons.min.css"
+   "css/resume.css"]]
+ [:body
+  [:header#header
+   [:div.container
+    [:div.row
+     [:div.col-sm-9.col-sm-push-3
+      [:h1 :data/basics.name]
+      [:h2 :data/basics.label]]]]]
+  [:div#content.container
+   [:section#contact.row
+    [:aside.col-sm-3
+     [:h3 "Contact"]]
+    [:div.col-sm-9
+     [:div.row
+      [:div.col-sm-6
+       [:strong "Email"]
+       [:div.email :data/basics.email]]
+      [:div.col-sm-6
+       [:strong "Phone"]
+       [:div.phone :data/basics.phone]]
+      [:div.col-sm-6
+       [:strong "Website"]
+       [:div.website
+        [:a {:href :data/basics.website} :data/basics.website]]]]]]
+   [:section#about.row
+    [:aside.col-sm-3
+     [:h3 "About"]]
+    [:div.col-sm-9
+     [:p :data/basics.summary]]]
+   [:section#profiles.row
+    [:aside.col-sm-3
+     [:h3 "Profiles"]]
+    [:div.col-sm-9
+     [:div.row
+      (for [{:keys [network username url]} :data/basics.profiles]
+        [:div.col-sm-6
+         [:strong.network network]
+         [:div.username
+          [:div.url
+           [:a {:href url} username]]]])]]]
+   [:section#work.row
+    [:aside.col-sm-3
+     [:h3 "Work"]]
+    [:div.col-sm-9
+     [:div.row
+      (for [{:keys [company position website startDate endDate summary highlights]}
+            :data/work]
+        [:div.col-sm-12
+         [:h4.strike-through
+          [:span company]
+          [:span.date startDate (when startDate " - ") endDate]]
+         (when website
+           [:div.website.pull-right
+            [:a {:href website} website]])
+         [:div.position position]
+         [:div.summary
+          [:p summary]]
+         (when highlights
+           [:div
+            [:h4 "Highlights"]
+            [:ul.highlights
+             (for [highlight highlights]
+               [:li.bullet highlight])]])])]]]
+   [:section#education.row
+    [:aside.col-sm-3
+     [:h3 "Education"]]
+    [:div.col-sm-9
+     [:div.row
+      (for [{:keys [institution area studyType startDate endDate]} :data/education]
+        [:div.col-sm-12
+         [:h4.strike-through
+          [:span institution]
+          [:span.date startDate (when startDate " - ") endDate]]
+         [:div.area area]
+         [:div.studyType studyType]])]]]
+   [:section#publications.row
+    [:aside.col-sm-3
+     [:h3 "Publications"]]
+    [:div.col-sm-9
+     [:div.row
+      (for [{:keys [name publisher releaseDate website summary]} :data/publications]
+        [:div.col-sm-12
+         [:h4.strike-through
+          [:span name]
+          [:span.date releaseDate]]
+         [:div.website.pull-right
+          [:a {:href website}]]
+         [:div.publisher
+          [:em "Published by "]
+          [:strong publisher]]
+         [:div.summary
+          [:p summary]]])]]]]]]

@@ -1,0 +1,24 @@
+{
+  "name": "doc-builder",
+  "version": "0.1.0",
+  "description": "data driven HTML/PDF document builder",
+  "author": "Dmitri Sotnokov",
+  "homepage": "https://github.com/yogthos/doc-builder",
+  "license": "EPL-2.0",
+  "dependencies": {
+    "puppeteer": "2.0.0"
+  },
+  "directories": {
+    "lib": "src"
+  },
+  "files": [
+    "src/*"
+  ],
+  "keywords": [
+    "cljs",
+    "cljc",
+    "html",
+    "pdf",
+    "templating"
+  ]
+}

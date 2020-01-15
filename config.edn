@@ -1,0 +1,5 @@
+{:template :default
+ :formats  [:pdf :html]
+ :pdf-opts {:format "A4"}
+ :document "sample.edn"
+ :target   "build"}
