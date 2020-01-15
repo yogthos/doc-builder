@@ -76,13 +76,15 @@ See the `default` template for a complete example.
  :formats  [:pdf :html]
  ;puppeteer options, format defaults to Letter
  :pdf-opts {:format "A4"} 
- ;input document
- :document "sample.edn"
  ;output folder
  :target   "build"}
 ```
 
-5. build the resume `./build.cljs`
+5. build the resume by passing one or more documents following the `--docs` flag:
+
+```
+./build.cljs --docs sample.edn
+```
 
 
 ## License

@@ -6,14 +6,11 @@
   "homepage": "https://github.com/yogthos/doc-builder",
   "license": "EPL-2.0",
   "dependencies": {
-    "puppeteer": "2.0.0"
+    "puppeteer": "2.0.0",
+    "image-to-base64": "2.0.1",
+    "request": "2.88.0",
+    "deasync": "0.1.19"
   },
-  "directories": {
-    "lib": "."
-  },
-  "files": [
-    "build.cljs"
-  ],
   "keywords": [
     "cljs",
     "cljc",

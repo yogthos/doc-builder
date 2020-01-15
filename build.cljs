@@ -156,9 +156,8 @@
 (defn read-config []
   (reader/read-string (slurp "config.edn")))
 
-(defn main []
-  (let [{:keys [template document formats target]} (read-config)
-        data (str "documents" path-sep document)
+(defn compile-document [{:keys [template formats target]} document]
+  (let [data (str "documents" path-sep document)
         document (subs document 0 (.lastIndexOf document "."))]
     (ensure-build-folder-exists target)
     (doseq [format formats]
@@ -172,4 +171,7 @@
         (->> (gen-html opts)
              ((case format :pdf write-pdf :html write-html) opts))))))
 
-(main)
+(let [documents (rest (drop-while #(not= "--docs" %) (.-argv js/process)))
+      config (read-config)]
+  (doseq [document documents]
+    (compile-document config document)))
