@@ -9,10 +9,10 @@
     "puppeteer": "2.0.0"
   },
   "directories": {
-    "lib": "src"
+    "lib": "."
   },
   "files": [
-    "src/*"
+    "build.cljs"
   ],
   "keywords": [
     "cljs",

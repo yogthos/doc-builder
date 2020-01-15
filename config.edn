@@ -1,4 +1,4 @@
-{:template :default
+{:template :resume
  :formats  [:pdf :html]
  :pdf-opts {:format "A4"}
  :document "sample.edn"

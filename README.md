@@ -66,14 +66,19 @@ See the `default` template for a complete example.
 1. check out this project locally
 3. run `npm install`
 3. update `documents/sample.edn` with your data
-4. update the configuration file called `config.edn` as necessary:
+4. update `config.edn` as needed, sample config:
 
 
 ```clojure
-{:template :default
+{;name of the template relative to the templates directory
+ :template :default
+ ;formats to output 
  :formats  [:pdf :html]
- :pdf-opts {:format "A4"} ;defaults to Letter
+ ;puppeteer options, format defaults to Letter
+ :pdf-opts {:format "A4"} 
+ ;input document
  :document "sample.edn"
+ ;output folder
  :target   "build"}
 ```
 
