@@ -2,7 +2,7 @@
  [:head
   [:meta {:charset "utf-8"}]
   [:meta {:name "viewport" :content "width=device-width, user-scalable=no, minimal-ui"}]
-  [:title "Dmitri Sotnikov"]
+  [:title :data/title]
   [:page/css
    "css/bootstrap.min.css"
    "css/octicons.min.css"

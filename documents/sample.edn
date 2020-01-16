@@ -1,4 +1,5 @@
-{:basics       {:name     "Ash"
+{:title        "Ash the Android"
+ :basics       {:name     "Ash"
                 :label    "science officer"
                 :email    "ash@weyland-yutani.com"
                 :phone    "(912) 555-4321"
