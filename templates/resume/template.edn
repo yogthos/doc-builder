@@ -30,6 +30,9 @@
        [:strong "Website"]
        [:div.website
         [:a {:href :data/basics.website} :data/basics.website]]]]]]
+   [:div.row    
+    [:div.col-sm-9
+     [:page/image {:src :data/basics.picture :width "100px"}]]]
    [:section#about.row
     [:aside.col-sm-3
      [:h3 "About"]]

@@ -1,4 +1,5 @@
 {:template :resume
  :formats  [:pdf :html]
  :pdf-opts {:format "A4"}
+ :source   "documents"
  :target   "build"}

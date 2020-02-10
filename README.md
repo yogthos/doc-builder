@@ -8,7 +8,7 @@ either HTML or PDF formats.
 
 ## Overview
 
-The document data should be placed in an EDN file in the `documents` directory.
+The document data should be placed in an EDN file in the `:source` directory.
 See `documents/sample.edn` for an example.
 
 The content of the data file is referenced by the template using a namespaced keyword in the following format:
@@ -58,6 +58,14 @@ Templates can reference CSS in files from the template directory, e.g:
    "css/resume.css"]
 ```
 
+Templates can reference images in files relative to the source directory, e.g:
+
+```clojure
+[:page/image {:src :data/basics.picture :width "100px"}]
+```
+
+The image will be injected into the document as a base 64 string.
+
 See the `default` template for a complete example.
 
 ### Usage
@@ -76,6 +84,8 @@ See the `default` template for a complete example.
  :formats  [:pdf :html]
  ;puppeteer options, format defaults to Letter
  :pdf-opts {:format "A4"} 
+ ;document template folder
+ :source   "documents"
  ;output folder
  :target   "build"}
 ```

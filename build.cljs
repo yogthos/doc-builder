@@ -66,7 +66,11 @@
    hiccup))
 
 ;;; template parser ;;;
+
 (def path-sep (.-sep path))
+
+(defn image? [node]
+  (and (vector? node) (= :page/image (first node))))
 
 (defn css? [node]
   (and (vector? node) (= :page/css (first node))))
@@ -103,23 +107,38 @@
    {:type "text/css"}
    (slurp (template-file-path template-name ref))])
 
+(defn image->b64 [file-path {:keys [source data]}]
+  ;; todo handle keywords as document data
+  (when file-path
+    (let [format    (last (string/split file-path #"\."))]
+      (str
+       "data:image/" format ";base64, "
+       (-> (path/resolve (str source path-sep file-path))
+           (fs/readFileSync)
+           (.toString "base64"))))))
+
+(defn inject-image [node opts]
+  (update-in node [1 :src] image->b64 opts))
+
 (defn parse-path [path]
   (mapv keyword (string/split path #"\.")))
 
-(defn parse-template [{:keys [template-name template format data]}]
+(defn parse-template [{:keys [template-name template data] :as opts}]
   (eval-functions
    (postwalk
     (fn [node]
       (cond
         (css? node)
         (map (partial inject-css template-name) (rest node))
+        (image? node)
+        (inject-image node opts)
         (data-node? node)
         (get-in data (parse-path (name node)))
         :else node))
     template)))
 
-(defn gen-html [data]
-  (-> data parse-template render-hiccup))
+(defn gen-html [opts]
+  (-> opts parse-template render-hiccup))
 
 (defn parse-edn [file]
   (-> file slurp reader/read-string))
@@ -156,8 +175,8 @@
 (defn read-config []
   (reader/read-string (slurp "config.edn")))
 
-(defn compile-document [{:keys [template formats target]} document]
-  (let [data (str "documents" path-sep document)
+(defn compile-document [{:keys [template formats source target]} document]
+  (let [data (str source path-sep document)
         document (subs document 0 (.lastIndexOf document "."))]
     (ensure-build-folder-exists target)
     (doseq [format formats]
@@ -166,6 +185,7 @@
                   :template-name (name template)
                   :template (parse-edn (template-file template))
                   :data     (parse-edn data)
+                  :source source
                   :target target}]
         (println "generating" (string/upper-case (name format)) "document:" target)
         (->> (gen-html opts)

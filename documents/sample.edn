@@ -3,6 +3,7 @@
                 :label    "science officer"
                 :email    "ash@weyland-yutani.com"
                 :phone    "(912) 555-4321"
+                :picture  "img/profile.jpg"
                 :website  "http://johndoe.com"
                 :summary  "Ash is a Hyperdyne Systems 120-A/2[2] synthetic that was created for Weyland-Yutani"
                 :location {:address     "2712 Broadway St"
