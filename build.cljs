@@ -191,7 +191,23 @@
         (->> (gen-html opts)
              ((case format :pdf write-pdf :html write-html) opts))))))
 
-(let [documents (rest (drop-while #(not= "--docs" %) (.-argv js/process)))
-      config (read-config)]
+(defn parse-args []
+  (->> (.-argv js/process)
+       (drop-while #(not (string/starts-with? % "--")))
+       (partition-by #(string/starts-with? % "--"))
+       (partition-all 2)
+       (reduce
+        (fn [args [[k] v]]
+          (assoc args
+                 (keyword k)
+                 (case k
+                   "--docs" v
+                   "--template" (-> (first v) (subs 1) keyword))))
+        {})))
+
+(let [args (parse-args)
+      documents (:--docs args)
+      template (:--template args)
+      config (update (read-config) :template #(or template %))]
   (doseq [document documents]
     (compile-document config document)))
