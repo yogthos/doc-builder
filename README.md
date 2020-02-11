@@ -96,6 +96,13 @@ See the `default` template for a complete example.
 ./build.cljs --docs sample.edn
 ```
 
+It's also possible to specify the template using the `--template` flag. This will
+override the template sepcified in the config:
+
+
+```
+./build.cljs --docs sample.edn --template :resume
+```
 
 ## License
 
