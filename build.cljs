@@ -107,7 +107,7 @@
    {:type "text/css"}
    (slurp (template-file-path template-name ref))])
 
-(defn image->b64 [file-path {:keys [source data]}]
+(defn image->b64 [file-path {:keys [source]}]
   ;; todo handle keywords as document data
   (when file-path
     (let [format    (last (string/split file-path #"\."))]
@@ -146,24 +146,22 @@
 (defn template-file [template]
   (str "templates" path-sep (name template) path-sep "template.edn"))
 
-(defn write-pdf [{:keys [target pdf-opts]} html]
-  (let [browser (.launch puppeteer (clj->js {:args ["--no-sandbox" "--disable-setuid-sandbox"]}))]   
-    (-> browser
-     (.then #(.newPage %))   
-     (.then
-        (fn [page _]
-          (-> (.setContent page html)
-              (.then #(.emulateMedia page "screen"))
-              (.then (fn [_ _]
-                         (-> (.pdf page (clj->js (merge {:path target 
-                                                         :format "Letter"
-                                                         :printBackground true}
-                                                        pdf-opts)))
-                             (.then
-                              (fn [pdf]
-                                (.then (js/Promise.resolve browser) #(.close %))))
-                             (.catch #(js/console.error (.-message %))))))              
-              (.catch #(js/console.error (.-message %)))))))))
+(defn write-pdf [{:keys [browser pending target pdf-opts]} html]
+  (-> browser
+      (.then #(.newPage %))
+      (.then
+       (fn [page _]
+         (-> (.setContent page html)
+             (.then #(.emulateMedia page "screen"))
+             (.then (fn [_ _]
+                      (-> (.pdf page (clj->js (merge {:path target
+                                                      :format "Letter"
+                                                      :printBackground true}
+                                                     pdf-opts)))
+                          (.then
+                             (fn [_] (swap! pending dec)))
+                          (.catch #(js/console.error (.-message %))))))
+             (.catch #(js/console.error (.-message %))))))))
 
 (defn write-html [{:keys [target]} html]
   (spit target html))
@@ -175,21 +173,20 @@
 (defn read-config []
   (reader/read-string (slurp "config.edn")))
 
-(defn compile-document [{:keys [template formats source target]} document]
+(defn compile-document [{:keys [template formats source target] :as opts} document]
   (let [data (str source path-sep document)
-        document (subs document 0 (.lastIndexOf document "."))]
+        document (subs document 0 (.lastIndexOf document "."))
+        opts     (merge opts
+                        {:template-name (name template)
+                         :template      (parse-edn (template-file template))
+                         :data          (parse-edn data)})
+        html     (gen-html opts)]
     (ensure-build-folder-exists target)
     (doseq [format formats]
-      (let [target (str target path-sep document "." (name format))
-            opts {:format format
-                  :template-name (name template)
-                  :template (parse-edn (template-file template))
-                  :data     (parse-edn data)
-                  :source source
-                  :target target}]
-        (println "generating" (string/upper-case (name format)) "document:" target)
-        (->> (gen-html opts)
-             ((case format :pdf write-pdf :html write-html) opts))))))
+      (println "generating" (string/upper-case (name format)) "document:" target)
+      ((case format :pdf write-pdf :html write-html)
+       (assoc opts :target (str target path-sep document "." (name format)))
+       html))))
 
 (defn parse-args []
   (->> (.-argv js/process)
@@ -207,7 +204,20 @@
 
 (let [args (parse-args)
       documents (:--docs args)
-      template (:--template args)
-      config (update (read-config) :template #(or template %))]
+      template  (:--template args)
+      config    (read-config)
+      browser   (when (some #{:pdf} (:formats config))
+                  (.launch puppeteer (clj->js {:args ["--no-sandbox" "--disable-setuid-sandbox"]})))
+      pending   (when browser
+                  (doto (atom (count documents))
+                    (add-watch :watcher
+                               (fn [_ _ _ pending]
+                                 (when (zero? pending)
+                                   (.then (js/Promise.resolve browser)
+                                          #(.close %)))))))]
   (doseq [document documents]
-    (compile-document config document)))
+    (compile-document
+     (-> config
+         (assoc :browser browser :pending pending)
+         (update :template #(or template %)))
+     document)))
