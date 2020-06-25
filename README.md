@@ -70,9 +70,8 @@ See the `default` template for a complete example.
 
 ### Usage
 
-0. install [Lumo](http://lumo-cljs.org/)
 1. check out this project locally
-3. run `npm install`
+3. run `lein cljsbuild once release`
 3. update `documents/sample.edn` with your data
 4. update `config.edn` as needed, sample config:
 
@@ -93,7 +92,7 @@ See the `default` template for a complete example.
 5. build the resume by passing one or more documents following the `--docs` flag:
 
 ```
-./build.cljs --docs sample.edn
+node target/doc-builder.js --docs sample.edn
 ```
 
 It's also possible to specify the template using the `--template` flag. This will
@@ -101,7 +100,7 @@ override the template sepcified in the config:
 
 
 ```
-./build.cljs --docs sample.edn --template :resume
+node target/doc-builder.js --docs sample.edn --template :resume
 ```
 
 ## License
