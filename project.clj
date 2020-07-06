@@ -9,7 +9,7 @@
   :cljsbuild {:builds [{:id "release"
                         :source-paths ["src"]
                         :compiler {:main doc-builder.core
-                                   :output-to "target/doc-builder.js"
+                                   :output-to "doc-builder.js"
                                    :target :nodejs
                                    :optimizations :simple
                                    :npm-deps {"puppeteer" "3.3.0"}
