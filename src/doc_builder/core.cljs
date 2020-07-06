@@ -210,7 +210,7 @@
                    "--template" (-> (first v) (subs 1) keyword))))
         {})))
 
-(defn -main [& args]
+(defn main [& _]
   (let [args (parse-args)
         documents (:--docs args)
         template  (:--template args)
@@ -231,4 +231,4 @@
            (update :template #(or template %)))
        document))))
 
-(set! *main-cli-fn* -main)
+(set! *main-cli-fn* main)
