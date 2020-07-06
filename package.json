@@ -1,6 +1,6 @@
 {
   "name": "@yogthos/doc-builder",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A data driven HTML/PDF document builder",
   "author": "Dmitri Sotnikov",
   "homepage": "https://github.com/yogthos/doc-builder",
