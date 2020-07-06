@@ -71,7 +71,7 @@ See the `default` template for a complete example.
 ### Usage
 
 1. check out this project locally
-3. run `lein cljsbuild once release`
+3. run `npm install doc-builder`
 3. update `documents/sample.edn` with your data
 4. update `config.edn` as needed, sample config:
 
@@ -92,16 +92,22 @@ See the `default` template for a complete example.
 5. build the resume by passing one or more documents following the `--docs` flag:
 
 ```
-node target/doc-builder.js --docs sample.edn
+doc-builder --docs sample.edn
 ```
 
 It's also possible to specify the template using the `--template` flag. This will
-override the template sepcified in the config:
+override the template specified in the config:
 
 
 ```
-node target/doc-builder.js --docs sample.edn --template :resume
+doc-builder --docs sample.edn --template :resume
 ```
+
+### Development mode
+
+* run `lein cljsbuild watch release` to start cljs compiler
+* run the compiled script with `node doc-builder.js --docs sample.edn`
+* compiling for release `lein cljsbuild once release`
 
 ## License
 
