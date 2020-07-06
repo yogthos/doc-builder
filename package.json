@@ -1,5 +1,5 @@
 {
-  "name": "doc-builder",
+  "name": "@yogthos/doc-builder",
   "version": "0.1.0",
   "description": "A data driven HTML/PDF document builder",
   "author": "Dmitri Sotnikov",
@@ -9,16 +9,10 @@
   "dependencies": {
     "puppeteer": "^3.3.0"
   },
-  "directories": {
-    "lib": "target"
-  },
   "main": "doc-builder.js",
   "bin": {
     "mastodon-bot": "./doc-builder.js"
   },
-  "files": [
-    "target/*"
-  ],
   "keywords": [
     "cljs",
     "pdf",

@@ -71,7 +71,7 @@ See the `default` template for a complete example.
 ### Usage
 
 1. check out this project locally
-3. run `npm install doc-builder`
+3. run `npm install @yogthos/doc-builder`
 3. update `documents/sample.edn` with your data
 4. update `config.edn` as needed, sample config:
 
