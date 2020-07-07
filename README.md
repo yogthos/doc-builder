@@ -35,9 +35,9 @@ Corresponding data payload should look as follows:
 
 ```clojure
 {:basics
- {:network  "Twitter"
-  :username "john"
-  :url      "http://twitter.com/john"}}
+ {:network  "Mastodon Social"
+  :username "yogthos"
+  :url      "https://mastodon.social/@yogthos"}}
 ```
 
 Templates use the following directory structure:
@@ -71,7 +71,7 @@ See the `default` template for a complete example.
 ### Usage
 
 1. check out this project locally
-3. run `npm install @yogthos/doc-builder`
+3. run `npm install -g @yogthos/doc-builder`
 3. update `documents/sample.edn` with your data
 4. update `config.edn` as needed, sample config:
 
