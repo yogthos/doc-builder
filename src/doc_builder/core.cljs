@@ -1,10 +1,10 @@
-#!/usr/bin/env lumo
-(ns build.core
-  (:require
+(ns doc-builder.core
+  (:require 
+   [cljs.nodejs :as nodejs]
    [cljs.reader :as reader]
    [clojure.string :as string]
    [clojure.walk :refer [prewalk postwalk]]
-   [lumo.core :as lumo]
+   [cljs.js :refer [empty-state eval js-eval]]
    ["fs" :as fs]
    ["path" :as path]
    ["puppeteer" :as puppeteer]))
@@ -60,7 +60,7 @@
 (defn render-hiccup [hiccup]
   (postwalk
    (fn [node]
-     (if (and (not (map-entry? node))(vector? node))
+     (if (and (not (map-entry? node)) (vector? node))
        (-> node normalize-element render-element)
        node))
    hiccup))
@@ -78,11 +78,19 @@
 (defn data-node? [node]
   (and (keyword? node) (= "data" (namespace node))))
 
+(defn eval-form [form]
+  (eval (empty-state)
+        form
+        {:eval       js-eval
+         :source-map true
+         :context    :expr}
+        (fn [result] result)))
+
 (defn eval-functions [template]
   (prewalk
    (fn [node]
      (if (list? node)
-       (lumo/eval node)
+       (eval-form node)
        node))
    template))
 
@@ -159,7 +167,7 @@
                                                       :printBackground true}
                                                      pdf-opts)))
                           (.then
-                             (fn [_] (swap! pending dec)))
+                           (fn [_] (swap! pending dec)))
                           (.catch #(js/console.error (.-message %))))))
              (.catch #(js/console.error (.-message %))))))))
 
@@ -202,22 +210,25 @@
                    "--template" (-> (first v) (subs 1) keyword))))
         {})))
 
-(let [args (parse-args)
-      documents (:--docs args)
-      template  (:--template args)
-      config    (read-config)
-      browser   (when (some #{:pdf} (:formats config))
-                  (.launch puppeteer (clj->js {:args ["--no-sandbox" "--disable-setuid-sandbox"]})))
-      pending   (when browser
-                  (doto (atom (count documents))
-                    (add-watch :watcher
-                               (fn [_ _ _ pending]
-                                 (when (zero? pending)
-                                   (.then (js/Promise.resolve browser)
-                                          #(.close %)))))))]
-  (doseq [document documents]
-    (compile-document
-     (-> config
-         (assoc :browser browser :pending pending)
-         (update :template #(or template %)))
-     document)))
+(defn main [& _]
+  (let [args (parse-args)
+        documents (:--docs args)
+        template  (:--template args)
+        config    (read-config)
+        browser   (when (some #{:pdf} (:formats config))
+                    (.launch puppeteer (clj->js {:args ["--no-sandbox" "--disable-setuid-sandbox"]})))
+        pending   (when browser
+                    (doto (atom (count documents))
+                      (add-watch :watcher
+                                 (fn [_ _ _ pending]
+                                   (when (zero? pending)
+                                     (.then (js/Promise.resolve browser)
+                                            #(.close %)))))))]
+    (doseq [document documents]
+      (compile-document
+       (-> config
+           (assoc :browser browser :pending pending)
+           (update :template #(or template %)))
+       document))))
+
+(set! *main-cli-fn* main)
