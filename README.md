@@ -5,6 +5,7 @@ described using two files. One file conains HTML markup for the document
 in Hiccup format, and the other contains document data in EDN format. The library will inject the EDN data into the markup and compile it to
 either HTML or PDF formats.
 
+[![NPM](https://nodei.co/npm/@yogthos/doc-builder.png?mini=true)](https://www.npmjs.com/package/@yogthos/doc-builder)
 
 ## Overview
 
