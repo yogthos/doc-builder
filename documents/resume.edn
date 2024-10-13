@@ -5,9 +5,7 @@
                 :phone    "(647) 985-3615"
                 :website  "http://atmodyne.ca"
                 :summary  "I'm a software developer with over a decade of experience in web application domain, and have extensive experience in all aspects of application development lifecycle. I have experience in doing requirements gathering, scope analysis, project planning, design, development, and operations. In my role as a technical team lead I have managed teams through design, development, and operations of large scale mission critical projects. I'm also the author of the Luminus framework, and an active member of Clojure open source community."
-                :location {:address     "1210-45 Carlton street"
-                           :postalCode  "M5B 2H9"
-                           :city        "Toronto"
+                :location {:city        "Toronto"
                            :countryCode "Canada"
                            :region      "Ontario"}
                 :profiles [{:network  "LinkedIn"
